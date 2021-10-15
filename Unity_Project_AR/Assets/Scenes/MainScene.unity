@@ -197,6 +197,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 044947f1910074d479a7269d5cc8b64e, type: 3}
   m_PrefabInstance: {fileID: 245021978}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &245021980 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 044947f1910074d479a7269d5cc8b64e, type: 3}
+  m_PrefabInstance: {fileID: 245021978}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &245021981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245021980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dcb3bc1949ee454cb8a6bfc3f85c6ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  degreePerSecond: 45
 --- !u!1 &565402513
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +467,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 1691058483}
+  - {fileID: 1583527090}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -702,7 +720,7 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!21 &1691058483
+--- !u!21 &1583527090
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
@@ -711,7 +729,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: 'ArutalaLogoMaterial
 
-    -4160'
+    16190'
   m_Shader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: 
   m_LightmapFlags: 5

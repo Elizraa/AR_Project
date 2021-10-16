@@ -3,6 +3,7 @@
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
+Data/
 Assets/AssetStoreTools*
 
 # Visual Studio cache directory
@@ -35,3 +36,4 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Unity_Project_AR/Packages/com.ptc.vuforia.engine-10.2.5.tgz

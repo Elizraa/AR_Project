@@ -7,6 +7,7 @@ public class Manager : MonoBehaviour
     public static Manager instance;
 
     public bool detected;
+    public float deltaTimeDetected = 0.5f;
 
     private bool firstOpened = true;
 
@@ -18,9 +19,10 @@ public class Manager : MonoBehaviour
     public ParticleSystem particle;
     public Material[] particleEffect;
 
-    public float deltaTimeDetected = 0.5f;
 
-    Coroutine varCoroDetected = null;
+    private Coroutine varCoroDetected = null;
+
+    public GameObject guideScan;
 
     private void Awake()
     {
@@ -48,6 +50,7 @@ public class Manager : MonoBehaviour
     IEnumerator onDetectedWaits()
     {
         float timeElapsed = 0f;
+        guideScan.SetActive(false);
         while (timeElapsed < deltaTimeDetected)
         {
             timeElapsed += Time.deltaTime;
@@ -61,6 +64,7 @@ public class Manager : MonoBehaviour
 
     public void offDetected()
     {
+        guideScan.SetActive(true);
         if(firstOpened)
         {
             firstOpened = false;

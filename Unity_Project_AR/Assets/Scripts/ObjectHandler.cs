@@ -8,12 +8,6 @@ public class ObjectHandler : MonoBehaviour
     public float zoomSpeed = 0.01f;
     public float rotateSpeed = 0.5f;
 
-    public int particleEmit = 25;
-    public ParticleSystem particle;
-    public Material[] particleEffect;
-
-
-
     Touch touchZero, touchOne;
     float prevTouchDeltaMag;
     Vector3 prevTouchPos;
@@ -120,21 +114,6 @@ public class ObjectHandler : MonoBehaviour
         transform.localRotation = Quaternion.Euler(targetRotation, defaultRotation.y, defaultRotation.z);
         StartCoroutine(Rotate(90 / degreePerSecond));
     }
-
-      public void ParticleEmit()
-    {
-        particle.GetComponent<ParticleSystemRenderer>().material = particleEffect[Random.Range(0, particleEffect.Length)];
-        particle.Emit(particleEmit);
-        ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particle.main.maxParticles];
-        particle.GetParticles(particles);
-        for(int i = 0; i < particles.Length; i++)
-        {
-            Vector3 temp = particles[i].velocity;
-            temp.z = 0;
-            particles[i].velocity = temp;
-        }
-    }
-    
 
     public void ResetTransform()
     {

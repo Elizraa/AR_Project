@@ -7,22 +7,28 @@ public class Manager : MonoBehaviour
     public static Manager instance;
 
     public bool detected;
+    public bool minigame;
     public float deltaTimeDetected = 0.5f;
 
     private bool firstOpened = true;
 
     public AudioSource audioSource;
 
-    public AudioClip detectedSound, notDetectedSound;
+    public AudioClip detectedSound, notDetectedSound, click, capture, pickup;
 
     public int particleEmit = 25;
     public ParticleSystem particle;
     public Material[] particleEffect;
 
+    public GameObject canvasMinigame; 
 
     private Coroutine varCoroDetected = null;
 
     public GameObject guideScan;
+
+    public GameObject enterMinigameButton;
+
+    public ObjectHandler mainObject;
 
     private void Awake()
     {
@@ -33,7 +39,7 @@ public class Manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        canvasMinigame.SetActive(false);
     }
 
     // Update is called once per frame
@@ -83,5 +89,37 @@ public class Manager : MonoBehaviour
     {
         particle.GetComponent<ParticleSystemRenderer>().material = particleEffect[Random.Range(0, particleEffect.Length)];
         particle.Emit(particleEmit);
+    }
+
+    public void Minigame()
+    {
+        PlayButtonClickSound();
+        minigame = true;
+        mainObject.ResetSize();
+        canvasMinigame.SetActive(true);
+        enterMinigameButton.SetActive(false);
+    }
+
+    public void Home()
+    {
+        PlayButtonClickSound();
+        minigame = false;
+        canvasMinigame.SetActive(false);
+        enterMinigameButton.SetActive(true);
+    }
+
+    public void PlayButtonClickSound()
+    {
+        audioSource.PlayOneShot(click);
+    }
+
+    public void PlayButtonCaptureSound()
+    {
+        audioSource.PlayOneShot(capture);
+    }
+
+    public void PlayHeartPickupSound()
+    {
+        audioSource.PlayOneShot(pickup);
     }
 }

@@ -32,7 +32,7 @@ public class ScreenshotManager : MonoBehaviour
     }
 
     //Create take screenshot method. It will be called by the button
-    //[System.Obsolete]
+    [System.Obsolete]
     public void TakeScreenshots()
     {
         StartCoroutine(CaptureScreen());
@@ -45,6 +45,7 @@ public class ScreenshotManager : MonoBehaviour
         {
             //set captured image on picture holder and enable it
             pictureHolder.sprite = sprite;
+            debug.text = "";
             ShowPictureHolder(true);
             // assume "sprite" is your Sprite object
             croppedTexture = new Texture2D((int)sprite.rect.width, (int)sprite.rect.height);
@@ -66,11 +67,13 @@ public class ScreenshotManager : MonoBehaviour
     //create the cancel method
     public void Cancel()
     {
+        Manager.instance.PlayButtonClickSound();
         ShowPictureHolder(false);
     }
 
     public void Save()
     {
+        Manager.instance.PlayButtonClickSound();
         debug.text = "Loading...";
         filename = "SS_Arutala"+".png";
         // salin file gambar ke gallery
@@ -81,6 +84,7 @@ public class ScreenshotManager : MonoBehaviour
     //Create share method
     public void Share()
     {
+        Manager.instance.PlayButtonClickSound();
         GleyShare.Manager.SharePicture();
     }
 
@@ -91,7 +95,7 @@ public class ScreenshotManager : MonoBehaviour
         yield return null;
         canvasIncluded.enabled = true;
         canvasNotIncluded.enabled = false;
-
+        Manager.instance.PlayButtonCaptureSound();
         // Wait for screen rendering to complete
         yield return new WaitForEndOfFrame();
 

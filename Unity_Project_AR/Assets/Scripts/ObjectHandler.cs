@@ -12,7 +12,11 @@ public class ObjectHandler : MonoBehaviour
     float prevTouchDeltaMag;
     Vector3 prevTouchPos;
 
+    public Transform particleObject;
+
     Vector3 defaultSize, defaultRotation;
+
+    public FloatVariable score;
 
     void Start()
     {
@@ -25,13 +29,13 @@ public class ObjectHandler : MonoBehaviour
     void Update()
     {
         //Rotate2(rotatespeed);
-        if(Input.touchCount == 1)
+        if(Input.touchCount == 1 && Manager.instance.detected)
         {
             touchZero = Input.GetTouch(0);
             prevTouchPos = touchZero.position - touchZero.deltaPosition;
         }
 
-        if (Input.touchCount == 2 && Manager.instance.detected)
+        if (Input.touchCount == 2 && Manager.instance.detected && !Manager.instance.minigame)
         {
             // Store both touches.
             touchZero = Input.GetTouch(0);
@@ -49,7 +53,7 @@ public class ObjectHandler : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(Input.touchCount == 1)
+        if(Input.touchCount == 1 && Manager.instance.detected)
         {
             Vector2 deltaTouch = touchZero.position - (Vector2)prevTouchPos;
             Vector3 temp = transform.localEulerAngles;
@@ -59,7 +63,7 @@ public class ObjectHandler : MonoBehaviour
             transform.localEulerAngles = temp;
         }
 
-        if (Input.touchCount == 2 && Manager.instance.detected)
+        if (Input.touchCount == 2 && Manager.instance.detected && !Manager.instance.minigame)
         {
             float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
 
@@ -71,10 +75,12 @@ public class ObjectHandler : MonoBehaviour
             if (deltaMagnitudeDiff > 0)
             {
                 transform.localScale = transform.localScale - zoom;
+                particleObject.localScale = particleObject.localScale - zoom;
             }
             else if (deltaMagnitudeDiff < 0)
             {
                 transform.localScale = transform.localScale + zoom;
+                particleObject.localScale = particleObject.localScale + zoom;
             }
         }
     }
@@ -91,7 +97,7 @@ public class ObjectHandler : MonoBehaviour
             {
                 break;
             }
-            if (!Manager.instance.detected)
+            if (!Manager.instance.detected || Manager.instance.minigame)
             {
                 yield return null;
                 continue;
@@ -115,9 +121,17 @@ public class ObjectHandler : MonoBehaviour
         StartCoroutine(Rotate(90 / degreePerSecond));
     }
 
-    public void ResetTransform()
+    public void ResetSize()
     {
         transform.localScale = defaultSize;
         transform.localRotation = Quaternion.Euler(defaultRotation);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(other.name);
+        Manager.instance.PlayHeartPickupSound();
+        score.value++;
+        other.GetComponent<Pickup>()?.Disable();
     }
 }

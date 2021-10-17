@@ -1,5 +1,8 @@
 # AR_Project
- First Augmented Reality Project First Test
+
+ First Augmented Reality Project  
+ Made with Unity
+
 
 ## Plugin needed
 

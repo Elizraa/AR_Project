@@ -10,10 +10,13 @@ public class ScreenshotManager : MonoBehaviour
 
     public Text debug;
 
-    public GameObject panel;
-    public GameObject canvasNotIncluded;
+    public GameObject panelResult;
+    public Canvas canvasNotIncluded;
+    public Canvas canvasIncluded;
+    public GameObject buttonScreenshot;
 
     private Texture2D croppedTexture;
+    private string filename;
 
     //Hide picture holder
     void Start()
@@ -24,7 +27,8 @@ public class ScreenshotManager : MonoBehaviour
 
     private void ShowPictureHolder(bool visible)
     {
-        panel.SetActive(visible);
+        panelResult.SetActive(visible);
+        buttonScreenshot.SetActive(!visible);
     }
 
     //Create take screenshot method. It will be called by the button
@@ -48,15 +52,15 @@ public class ScreenshotManager : MonoBehaviour
                                                     (int)sprite.textureRect.y,
                                                     (int)sprite.textureRect.width,
                                                     (int)sprite.textureRect.height);
-            debug.text = "Berhasil";
+            //debug.text = "Berhasil";
             croppedTexture.SetPixels(pixels);
             croppedTexture.Apply();
         }
-        else
-            debug.text = "Gagal";
+        //else
+        //    debug.text = "Gagal";
 
-
-        canvasNotIncluded.GetComponent<Canvas>().enabled = true;
+        canvasIncluded.enabled = false;
+        canvasNotIncluded.enabled = true;
     }
 
     //create the cancel method
@@ -67,13 +71,11 @@ public class ScreenshotManager : MonoBehaviour
 
     public void Save()
     {
-        filename = "SS_2_" + Random.Range(0, 1000) + ".png";
-        debug.text = "Udah Ada2";
+        debug.text = "Loading...";
+        filename = "SS_Arutala"+".png";
         // salin file gambar ke gallery
         string album = "ARUTALA_AR"; // folder album tempat menyimpan gambar
-        bool yey = false;
-        NativeGallery.SaveImageToGallery(croppedTexture, album, filename, (success, path) => yey = success);
-        debug.text = "aaa__"+yey;
+        NativeGallery.SaveImageToGallery(croppedTexture, album, filename, (success, path) => debug.text = "Saved in "+path);
     }
 
     //Create share method
@@ -87,7 +89,8 @@ public class ScreenshotManager : MonoBehaviour
     {
         // Wait till the last possible moment before screen rendering to hide the UI
         yield return null;
-        canvasNotIncluded.GetComponent<Canvas>().enabled = false;
+        canvasIncluded.enabled = true;
+        canvasNotIncluded.enabled = false;
 
         // Wait for screen rendering to complete
         yield return new WaitForEndOfFrame();
@@ -97,89 +100,4 @@ public class ScreenshotManager : MonoBehaviour
         // Show UI after we're done
     }
 
-    private string filename;
-
-    public void SaveScreenshot()
-    {
-        StartCoroutine(SaveScreenshotEnum());
-    }
-
-    IEnumerator SaveScreenshotEnum()
-    {
-        // tunggu sampai file benar-benar tersimpan dengan memeriksa apakah file ada
-        bool fileExist;
-        do
-        {
-            // selalu gunakan Path.Combine untuk menggabungkan direktori & nama file
-            fileExist = File.Exists(Path.Combine(Application.persistentDataPath, filename));
-            debug.text = "fileExist--" + fileExist;
-            yield return null;
-        } while (!fileExist);
-
-        debug.text = "Udah Ada";
-        // salin file gambar ke gallery
-        string album = "ARUTALA_AR"; // folder album tempat menyimpan gambar
-        NativeGallery.SaveImageToGallery(Application.persistentDataPath, album, filename, (success,path) => debug.text = "Media save result: " + success + " " + path);
-        //debug.text = "Selesai";
-    }
-
-    //public void TakeScreenshot()
-    //{
-    //    StartCoroutine(TakeScrenshotEnum());
-    //}
-
-    IEnumerator TakeScrenshotEnum()
-    {
-        // nama file screenshot
-        filename = "SS_" + Random.Range(0, 1000) + ".png";
-
-        // simpan screenshot ke persistent data path
-        ScreenCapture.CaptureScreenshot(filename);
-
-        bool fileExist;
-        do
-        {
-            // selalu gunakan Path.Combine untuk menggabungkan direktori & nama file
-            fileExist = File.Exists(Path.Combine(Application.persistentDataPath, filename));
-            debug.text = "fileExist2--" + fileExist;
-            yield return null;
-        } while (!fileExist);
-
-        pictureHolder.sprite = LoadSprite(filename);
-
-        pictureHolder.enabled = true;
-
-    }
-
-    private IEnumerator TakeScreenshotAndSave()
-    {
-        yield return new WaitForEndOfFrame();
-
-        Texture2D ss = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        ss.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        ss.Apply();
-
-        // Save the screenshot to Gallery/Photos
-        NativeGallery.Permission permission = NativeGallery.SaveImageToGallery(ss, "GalleryTest", "Image.png", (success, path) => Debug.Log("Media save result: " + success + " " + path));
-
-        Debug.Log("Permission result: " + permission);
-
-        // To avoid memory leaks
-        Destroy(ss);
-    }
-
-    private Sprite LoadSprite(string path)
-    {
-        if (string.IsNullOrEmpty(path)) return null;
-        if (File.Exists(Path.Combine(Application.persistentDataPath, path)))
-        {
-            byte[] bytes = File.ReadAllBytes(Path.Combine(Application.persistentDataPath, path));
-            Texture2D texture = new Texture2D(1, 1);
-            texture.LoadImage(bytes);
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-            return sprite;
-        }
-        pictureHolder.color = Color.blue;
-        return null;
-    }
 }

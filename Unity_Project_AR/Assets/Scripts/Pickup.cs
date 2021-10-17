@@ -1,23 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
+    // This script is still in development
+
+    [Tooltip("The owner of this object")]
     public Spawner spawner;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Disable object and send it to the pool to queue for spawning
+    /// </summary>
     public void Disable()
     {
         gameObject.SetActive(false);

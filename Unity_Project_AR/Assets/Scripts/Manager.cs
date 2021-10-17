@@ -1,37 +1,50 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
+    [Tooltip("Singleton")]
     public static Manager instance;
 
+    [Tooltip("Wether the marker is detected or not")]
     public bool detected;
+
+    [Tooltip("Wether it is minigame mode or not")]
     public bool minigame;
+
+    [Tooltip("How many seconds the object stay appear to be declared as detected ")]
     public float deltaTimeDetected = 0.5f;
 
+    [Tooltip("App openend")]
     private bool firstOpened = true;
 
     public AudioSource audioSource;
 
     public AudioClip detectedSound, notDetectedSound, click, capture, pickup;
 
+    [Tooltip("How many particle to brust out at a time")]
     public int particleEmit = 25;
     public ParticleSystem particle;
     public Material[] particleEffect;
 
+    [Tooltip("Minigame canvas")]
     public GameObject canvasMinigame; 
 
+    // To store coroutine for deltaTimeDetected function
     private Coroutine varCoroDetected = null;
 
+    [Tooltip("The UI To Guide User What To Scan")]
     public GameObject guideScan;
 
+    [Tooltip("Button to Enter the minigame")]
     public GameObject enterMinigameButton;
 
+    [Tooltip("The Main AR Object Target")]
     public ObjectHandler mainObject;
 
     private void Awake()
     {
+        // Make Singleton
         if (instance == null)
             instance = this;
     }
@@ -42,22 +55,22 @@ public class Manager : MonoBehaviour
         canvasMinigame.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Function for handle detected declared by vuforia
+    /// </summary>
     public void onDetected()
     {
         varCoroDetected = StartCoroutine(onDetectedWaits());
     }
 
+    /// <summary>
+    /// Function for handle detected declared after modified
+    /// </summary>
     IEnumerator onDetectedWaits()
     {
         float timeElapsed = 0f;
         guideScan.SetActive(false);
-        while (timeElapsed < deltaTimeDetected)
+        while (timeElapsed < deltaTimeDetected) // Wait till object really detected
         {
             timeElapsed += Time.deltaTime;
             yield return null;
@@ -68,6 +81,9 @@ public class Manager : MonoBehaviour
         varCoroDetected = null;
     }
 
+    /// <summary>
+    /// Function for handle notDetected declared by vuforia
+    /// </summary>
     public void offDetected()
     {
         guideScan.SetActive(true);
@@ -85,12 +101,18 @@ public class Manager : MonoBehaviour
         detected = false;
     }
 
+    /// <summary>
+    /// Function to start brust particle when object detected
+    /// </summary>
     public void ParticleEmit()
     {
         particle.GetComponent<ParticleSystemRenderer>().material = particleEffect[Random.Range(0, particleEffect.Length)];
         particle.Emit(particleEmit);
     }
 
+    /// <summary>
+    /// Function to start minigame
+    /// </summary>
     public void Minigame()
     {
         PlayButtonClickSound();
@@ -100,6 +122,9 @@ public class Manager : MonoBehaviour
         enterMinigameButton.SetActive(false);
     }
 
+    /// <summary>
+    /// Function to back home
+    /// </summary>
     public void Home()
     {
         PlayButtonClickSound();

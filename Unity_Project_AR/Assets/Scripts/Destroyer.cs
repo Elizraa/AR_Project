@@ -1,20 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Destroyer : MonoBehaviour
 {
-    public Transform targetMarker;
+    // This script is still in development
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Tooltip("The Object AR Target")]
+    public Transform targetMarker;
 
     // Update is called once per frame
     void Update()
     {
+        // Always follow target in z-axis
         Vector3 pos = transform.position;
         pos.z = targetMarker.position.z;
         transform.position = pos;
@@ -22,7 +18,6 @@ public class Destroyer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name + "--Destroyer");
         other.GetComponent<Pickup>().Disable();
     }
 }
